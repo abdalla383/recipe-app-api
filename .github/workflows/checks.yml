@@ -7,7 +7,7 @@ on: [push] # This is the trigger for the workflow.
 jobs:
     test-lint:
         name: Test and Lint # This is the name of the job that will run.
-        runs-on: ubuntu-20.04 # This specifies the type of runner to use.
+        runs-on: ubuntu-22.04 # This specifies the type of runner to use.
         steps: # This is the steps that will be executed in the job.
             - name: Login to DockerHub # This step logs in to DockerHub. you will see it in GitHub interface.
               uses: docker/login-action@v1 
