@@ -1,0 +1,17 @@
+#  It tells Docker which files and folders to exclude when building the image. For Reduces image size, Speeds up builds ...
+# Git
+.git
+.gitignore
+
+# Docker
+.docker
+
+# Python 
+# when we run python code it creates a __pycache__ folder with .pyc files
+app/__pycache__/
+app/*/__pycache__/
+app/*/*/__pycache__/
+app/*/*/*/__pycache__/
+.env/
+.venv/
+venv/
