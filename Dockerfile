@@ -26,11 +26,17 @@ ARG DEV=false
 # Create a virtual environment in /py
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
+    # Installed postgresql client package.
+    apk add --update --no-cache postgresql-client && \ 
+    # # Install temporary build dependencies for compiling packages, grouped under '.tmp-build-deps' and delete them later on.
+    apk add --update --no-cache --virtual .tmp-build-deps \
+        build-base postgresql-dev musl-dev && \
     /py/bin/pip install -r /tmp/requirements.txt && \
     if [ "$DEV" = "true" ]; then \
         /py/bin/pip install -r /tmp/requirements.dev.txt; \
     fi && \
     rm -rf /tmp && \
+    apk del .tmp-build-deps && \
     adduser \
         --disabled-password \
         --no-create-home \

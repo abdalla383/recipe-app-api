@@ -23,3 +23,27 @@ services:
     # Command to run when the container starts: runs Django development server
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
+    environment:
+      - DB_HOST=db # Service name have been added here.
+      - DB_NAME=dev_db
+      - DB_USER=dev_user
+      - DB_PASSWORD=changeme
+    depends_on:
+      - db # Ensure the 'db' service is started before 'app'
+
+  # Define the 'db' service (PostgreSQL database)
+  db:
+    image: postgres:13-alpine
+    volumes:
+      - dev-db-date:/var/lib/postgresql/data
+      # This is the detail for our local server.
+    environment:
+      - POSTGRES_DB=dev_db
+      - POSTGRES_USER=dev_user
+      - POSTGRES_PASSWORD=changeme
+
+
+
+volumes:
+  dev-db-date:
+    # Define a named volume for the database data
