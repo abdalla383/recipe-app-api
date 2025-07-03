@@ -11,12 +11,10 @@ class CalcTests(SimpleTestCase):
 
     def test_add_numbers(self):
         """Test adding number together"""
-        res = calc.add(5,6)
-
-        self.assertEqual(res,11)
+        res = calc.add(5, 6)  # ✅ space after comma
+        self.assertEqual(res, 11)  # ✅ space after comma
 
     def test_subtract_numbers(self):
         """Test subtracting numbers"""
         res = calc.subtract(10, 15)
-
         self.assertEqual(res, -5)
