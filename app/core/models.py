@@ -1,6 +1,7 @@
 """
 database models.
 """
+
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -10,12 +11,12 @@ from django.contrib.auth.models import (
 
 
 class UserManager(BaseUserManager):
-    """Manager for users"""
+    """Manager for users."""
 
     def create_user(self, email, password=None, **extra_fields):
         """Create save and return a new user."""
         if not email:
-            # will raise this error when email address is blank
+            # Will raise error when email address is blank
             raise ValueError('User must have an email address')
         # This is the feature that has been added
         user = self.model(email=self.normalize_email(email), **extra_fields)
@@ -45,3 +46,4 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
+
