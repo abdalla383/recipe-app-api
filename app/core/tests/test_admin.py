@@ -11,7 +11,7 @@ class AdminSiteTests(TestCase):
     """Tests for Django admin."""
 
     def setUp(self):
-        """Create user and client"""
+        """Create user and client."""
         self.client = Client()
         self.admin_user = get_user_model().objects.create_superuser(
             email='admin@example.com',
@@ -33,15 +33,16 @@ class AdminSiteTests(TestCase):
         self.assertContains(res, self.user.email)
 
     def test_edit_web_page(self):
-        """test the edit user page works"""
+        """Test the edit user page works."""
         url = reverse('admin:core_user_change', args=[self.user.id])
-        res = self.clinet.get(url)
-        self.assertEqual(res.status_code, 200) #This makes sure that the file can load on http
-
+        res = self.client.get(url)  # Corrected typo: self.clinet -> self.client
+        self.assertEqual(res.status_code, 200)
+        # This makes sure that the file can load on http
 
     def test_create_user_page(self):
         """Test the create user page works."""
-        url = self.client.get(url)
+        # Corrected: url needs to be defined using reverse before being used
+        url = reverse('admin:core_user_add')
         res = self.client.get(url)
 
         self.assertEqual(res.status_code, 200)
