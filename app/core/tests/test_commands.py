@@ -41,7 +41,7 @@ class CommandTests(SimpleTestCase):
         'time.sleep'
     )
     def test_wait_for_db_delay(self, patched_sleep, patched_check):
-        """Test: should retry when the DB is not ready at first."""
+        """Test waiting for database when getting OperationalError."""
         # Simulate 2 psycopg2 errors, 3 Django errors, then success
         patched_check.side_effect = (
             [Psycopg2Error] * 2 +
