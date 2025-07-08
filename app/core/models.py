@@ -8,20 +8,21 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 
-# class for user manager.
+
 class UserManager(BaseUserManager):
     """Manager for users"""
 
     def create_user(self, email, password=None, **extra_fields):
         """Create save and return a new user."""
         if not email:
-            raise ValueError('User must have an email address') #will raise this error when email address is blank
-        user = self.model(email=self.normalize_email(email), **extra_fields) # This is the feature that has been added
+            # will raise this error when email address is blank
+            raise ValueError('User must have an email address')
+        # This is the feature that has been added
+        user = self.model(email=self.normalize_email(email), **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
 
         return user
-
 
     def create_superuser(self, email, password):
         """Create and return a new superuser."""
@@ -32,7 +33,7 @@ class UserManager(BaseUserManager):
 
         return user
 
-# user calss.
+
 class User(AbstractBaseUser, PermissionsMixin):
     """User in the system"""
     email = models.EmailField(max_length=255, unique=True)
@@ -40,7 +41,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
-    #Assigning the user manager to this custom user model.
+    # Assigning the user manager to this custom user model.
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
