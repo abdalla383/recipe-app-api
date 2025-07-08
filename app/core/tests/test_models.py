@@ -1,8 +1,8 @@
 """
 Tests for models.
 """
-from django.test import TestCase # Base class for tests.
-from django.contrib.auth import get_user_model # Helper function
+from django.test import TestCase  # Base class for tests.
+from django.contrib.auth import get_user_model  # Helper function
 
 
 class ModelTests(TestCase):
@@ -20,13 +20,12 @@ class ModelTests(TestCase):
         self.assertEqual(user.email, email)
         self.assertTrue(user.check_password(password))
 
-
     def test_new_user_email_normalized(self):
         """Test email is normalized for new users."""
         smaple_email = [
             ['test1@EXAMPLE.come', 'test1@example.com'],
             ['Test2@Example.com', 'Test2@example.com'],
-            ['TEST3@EXAMPLE.COM',  'TEST@example.com'],
+            ['TEST3@EXAMPLE.COM',   'TEST@example.com'],
             ['test4@example.COM', 'test4@example.com'],
         ]
         for email, expected in smaple_email:
