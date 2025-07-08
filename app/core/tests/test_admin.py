@@ -35,13 +35,11 @@ class AdminSiteTests(TestCase):
     def test_edit_web_page(self):
         """Test the edit user page works."""
         url = reverse('admin:core_user_change', args=[self.user.id])
-        res = self.client.get(url)  # Corrected typo: self.clinet -> self.client
+        res = self.client.get(url)
         self.assertEqual(res.status_code, 200)
-        # This makes sure that the file can load on http
 
     def test_create_user_page(self):
         """Test the create user page works."""
-        # Corrected: url needs to be defined using reverse before being used
         url = reverse('admin:core_user_add')
         res = self.client.get(url)
 
