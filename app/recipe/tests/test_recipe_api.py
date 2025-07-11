@@ -24,6 +24,7 @@ def detail_url(recipe_id):
     """Create and return a recipe detail URL."""
     return reverse('recipe:recipe-detail', args=[recipe_id])
 
+
 def create_recipe(user, **params):
     """Create and return a sample recipe."""
     defaults = {
@@ -120,6 +121,7 @@ def test_create_recipe(self):
         self.assertEqual(getattr(recipe, k), v)
     self.assertEqual(recipe.user, self.user)
 
+
 def test_partial_update(self):
     """Test partial update of a recipe."""
     original_link = 'https://example.com/recipe.pdf'
@@ -138,6 +140,7 @@ def test_partial_update(self):
     self.assertEqual(recipe.title, payload['title'])
     self.assertEqual(recipe.link, original_link)
     self.assertEqual(recipe.user, self.user)
+
 
 def test_full_update(self):
     """Test full update of recipe."""
@@ -164,6 +167,7 @@ def test_full_update(self):
         self.assertEqual(getattr(recipe, k), v)
     self.assertEqual(recipe.user, self.user)
 
+
 def test_update_user_return_error(self):
     """Test changing the recipe user result in an error."""
     new_user = create_usre(email='user@example.com', password='test123')
@@ -176,6 +180,7 @@ def test_update_user_return_error(self):
     recipe.refresh_from_db()
     self.assertEqual(recipe.user, self.user)
 
+
 def test_delete_recipe(self):
     """Test deleting a recipe successful."""
     recipe = create_recipe(user=self.user)
@@ -185,6 +190,7 @@ def test_delete_recipe(self):
 
     self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
     self.assertFalse(Recipe.objects.filter(id=recipe).exists())
+
 
 def test_delete_other_users_recipe_error(self):
     """Test trying to delete another users recipe gives error"""
