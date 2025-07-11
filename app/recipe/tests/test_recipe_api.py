@@ -24,8 +24,6 @@ def detail_url(recipe_id):
     """Create and return a recipe detail URL."""
     return reverse('recipe:recipe-detail', args=[recipe_id])
 
-
-
 def create_recipe(user, **params):
     """Create and return a sample recipe."""
     defaults = {
@@ -58,10 +56,8 @@ class PublicRecipeAPITests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
-
 class PrivateRecipeApiTests(TestCase):
     """Test authenticated API requests."""
-
     def setUp(self):
         self.client = APIClient()
         unique_email = f'user_{uuid.uuid4()}@example.com'
@@ -142,6 +138,7 @@ def test_partial_update(self):
     self.assertEqual(recipe.title, payload['title'])
     self.assertEqual(recipe.link, original_link)
     self.assertEqual(recipe.user, self.user)
+
 def test_full_update(self):
     """Test full update of recipe."""
     recipe = create_recipe(
