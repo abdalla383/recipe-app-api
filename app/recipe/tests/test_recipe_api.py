@@ -35,9 +35,7 @@ def create_recipe(user, **params):
         'link': 'http://example.com/recipe.pdf',
     }
     defaults.update(params)
-
-    recipe = Recipe.objects.create(user=user, **defaults)
-    return recipe
+    return Recipe.objects.create(user=user, **defaults)
 
 
 def create_user(**params):
@@ -54,7 +52,6 @@ class PublicRecipeAPITests(TestCase):
     def test_auth_required(self):
         """Test auth is required to call API."""
         res = self.client.get(RECIPES_URL)
-
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
@@ -76,7 +73,6 @@ class PrivateRecipeApiTests(TestCase):
         create_recipe(user=self.user)
 
         res = self.client.get(RECIPES_URL)
-
         recipes = Recipe.objects.all().order_by('-id')
         serializer = RecipeSerializer(recipes, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
@@ -92,7 +88,6 @@ class PrivateRecipeApiTests(TestCase):
         create_recipe(user=self.user)
 
         res = self.client.get(RECIPES_URL)
-
         recipes = Recipe.objects.filter(user=self.user)
         serializer = RecipeSerializer(recipes, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
@@ -104,7 +99,6 @@ class PrivateRecipeApiTests(TestCase):
 
         url = detail_url(recipe.id)
         res = self.client.get(url)
-
         serializer = RecipeDetailSerializer(recipe)
         self.assertEqual(res.data, serializer.data)
 
@@ -116,8 +110,8 @@ class PrivateRecipeApiTests(TestCase):
             'price': Decimal('5.99'),
         }
         res = self.client.post(RECIPES_URL, payload)
-
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+
         recipe = Recipe.objects.get(id=res.data['id'])
         for k, v in payload.items():
             self.assertEqual(getattr(recipe, k), v)
@@ -157,7 +151,7 @@ class PrivateRecipeApiTests(TestCase):
             'description': 'New recipe description',
             'time_minutes': 10,
             'price': Decimal('2.50'),
-            'user': self.user.id  # ✅ هذا السطر هو اللي بيصلح الخطأ
+            'user': self.user.id
         }
 
         url = detail_url(recipe.id)
@@ -166,10 +160,12 @@ class PrivateRecipeApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         recipe.refresh_from_db()
         for k, v in payload.items():
-            if k != 'user':  # ✅ نتجاوز التحقق من user لأنه ما يتغير في الداتا بيز
-                self.assertEqual(getattr(recipe, k), v)
+            if k != 'user':
+                self.assertEqual(
+                    getattr(recipe, k),
+                    v
+                )
         self.assertEqual(recipe.user, self.user)
-
 
     def test_update_user_return_error(self):
         """Test changing the recipe user results in an error."""
