@@ -13,7 +13,6 @@ WORKDIR /app
 # Copy the Python dependencies files into the container
 COPY ./requirements.txt /tmp/requirements.txt
 COPY ./requirements.dev.txt /tmp/requirements.dev.txt
-COPY ./scripts /scripts
 
 # Copy the application code into the container
 COPY ./app /app
@@ -41,7 +40,6 @@ RUN python -m venv /py && \
     apk del .tmp-build-deps && \
     mkdir -p /vol/web/static /vol/web/media && \
     chmod -R 777 /vol/web && \
-    chmod -R +x /scripts && \
     adduser --disabled-password --no-create-home django-user
 
 # Add the virtual environment’s bin directory to the PATH
