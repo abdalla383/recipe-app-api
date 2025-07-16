@@ -27,11 +27,11 @@ EXPOSE 8000
 # Allow Docker Compose to override this with build arg
 ARG DEV=false
 
-# Create a virtual environment in /py
+# Create virtual environment and install dependencies
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
     apk add --update --no-cache postgresql-client jpeg-dev && \
-    apk add --update --no-cache --virtual .tmp-build-deps
+    apk add --update --no-cache --virtual .tmp-build-deps \
         build-base postgresql-dev musl-dev zlib zlib-dev linux-headers && \
     /py/bin/pip install -r /tmp/requirements.txt && \
     if [ "$DEV" = "true" ]; then \
@@ -41,7 +41,7 @@ RUN python -m venv /py && \
     apk del .tmp-build-deps && \
     mkdir -p /vol/web/static /vol/web/media && \
     chmod -R 777 /vol/web && \
-    chmod -R +x /script
+    chmod -R +x /scripts && \
     adduser --disabled-password --no-create-home django-user
 
 # Add the virtual environment’s bin directory to the PATH
