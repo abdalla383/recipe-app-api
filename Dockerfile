@@ -13,9 +13,13 @@ WORKDIR /app
 # Copy the Python dependencies files into the container
 COPY ./requirements.txt /tmp/requirements.txt
 COPY ./requirements.dev.txt /tmp/requirements.dev.txt
+COPY ./scripts /scripts
 
 # Copy the application code into the container
 COPY ./app /app
+
+# Add wait_for_db.py script to the container
+COPY ./app/wait_for_db.py /app/wait_for_db.py
 
 # Expose port 8000 to allow external access to the app
 EXPOSE 8000
@@ -26,21 +30,19 @@ ARG DEV=false
 # Create a virtual environment in /py
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
-    # Installed postgresql client package.
-    apk add --update --no-cache postgresql-client && \ 
-    # # Install temporary build dependencies for compiling packages, grouped under '.tmp-build-deps' and delete them later on.
-    apk add --update --no-cache --virtual .tmp-build-deps \
-        build-base postgresql-dev musl-dev && \
+    apk add --update --no-cache postgresql-client jpeg-dev && \
+    apk add --update --no-cache --virtual .tmp-build-deps
+        build-base postgresql-dev musl-dev zlib zlib-dev linux-headers && \
     /py/bin/pip install -r /tmp/requirements.txt && \
     if [ "$DEV" = "true" ]; then \
         /py/bin/pip install -r /tmp/requirements.dev.txt; \
     fi && \
     rm -rf /tmp && \
     apk del .tmp-build-deps && \
-    adduser \
-        --disabled-password \
-        --no-create-home \
-        django-user
+    mkdir -p /vol/web/static /vol/web/media && \
+    chmod -R 777 /vol/web && \
+    chmod -R +x /script
+    adduser --disabled-password --no-create-home django-user
 
 # Add the virtual environment’s bin directory to the PATH
 ENV PATH="/py/bin:$PATH"
